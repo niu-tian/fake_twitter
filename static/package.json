@@ -1,0 +1,26 @@
+{
+  "name": "FakeTwitter",
+  "version": "1.0.0",
+  "description": "FakeTwitter",
+  "main": "index.js",
+  "scripts": {
+    "start": "httpster -d ./dist -p 3000"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/polyfill": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "eslint-plugin-react": "^7.20.5",
+    "webpack": "^4.44.1"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "react": "^16.13.1",
+    "react-cookie": "^2.2.0",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0"
+  }
+}
