@@ -57,15 +57,17 @@ const RegisterForm = () => {
     };
     let url = BASE_URL + 'register/';
     fetch(url, requestOptions)
-      .then(response => response.text())
-      .then(text => {
-        if (text === "success") {
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
           history.push('/login/');
         } else {
-          setMessage(text);
+          setMessage(data.message);
         }
       })
-      .catch(e => setMessage(e));
+      .catch(e => {
+        setMessage(e);
+      });
   }
   return (
     <form noValidate autoComplete="off">

@@ -36,12 +36,12 @@ const LoginForm = () => {
     };
     let url = BASE_URL + 'login/';
     fetch(url, requestOptions)
-      .then(response => response.text())
-      .then((text) => {
-        if (text === "login successful") {
+      .then(response => response.json())
+      .then((data) => {
+        if (data.success) {
           history.push('/');
         } else {
-          setMessage(text);
+          setMessage(data.message);
         }
       })
       .catch(e => setMessage(e));

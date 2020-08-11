@@ -16,12 +16,21 @@ api = Blueprint('api', __name__, url_prefix='/api')
 def register():
   email = request.json['email']
   if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-    return "email invalid"
+    return {
+      "success": False,
+      "message": "email invalid",
+    }
   password = request.json['password']
   if len(password) < 8 or len(password) > 20:
-    return "password length invalid"
+    return {
+      "success": False,
+      "message": "password length invalid",
+    }
   if not re.match(r"^[A-Za-z0-9]*((\d+[A-Za-z]+)|([A-Za-z]+\d+))[A-Za-z0-9]*$", password):
-    return "password invalid"
+    return {
+      "success": False,
+      "message": "password invalid",
+    }
   firstname = request.json['firstname']
   lastname = request.json['lastname']
   result = db.user.update_one({
@@ -37,10 +46,17 @@ def register():
     }
   }, upsert=True)
   if result.matched_count > 0:
-    return "you already have an account"
+    return {
+      "success": False,
+      "message": "you already have an account",
+    }
   if not result.upserted_id:
-    return "register failed"
-  return "success"
+    return {
+      "success": False,
+      "message": "register failed",
+    }
+  return {"success": True}
+
 
 
 @api.route('/login/', methods=['GET', 'POST'])
@@ -56,5 +72,8 @@ def login():
     }
   })
   if result.modified_count == 0:
-    return "login failed"
-  return "login successful"
+    return {
+      "success": False,
+      "message": "login failed",
+    }
+  return {"success": True,}
