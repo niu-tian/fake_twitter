@@ -4,9 +4,13 @@ import NavigationBar from '../components/NavigationBar.js'
 
 export default class Home extends react.Component {
   render() {
-    return <NavigationBar
-            title="Welcome to Fake Twitter"
+    return (
+    <div>
+      <NavigationBar
+            title={'Welcome to Fake Twitter!'}
             showLoginButton={true}
-          />;
+      />
+    </div>
+    );
   }
 }

@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { BASE_URL } from '../global.js';
 import { MISSING_FIELD } from '../literal.js';
 import { useHistory } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 const LoginForm = () => {
   const history = useHistory();
@@ -11,6 +12,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const setCookie = useCookies([])[1];
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -39,6 +41,8 @@ const LoginForm = () => {
       .then(response => response.json())
       .then((data) => {
         if (data.success) {
+          setCookie('token', data.token, {path: '/'});
+          setCookie('firstname', data.firstname, {path: '/'})
           history.push('/');
         } else {
           setMessage(data.message);

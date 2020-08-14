@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, Blueprint
 import pymongo
 from pymongo import MongoClient
-from util import hash_pwd
+from util import hash_pwd, generate_token
 import re
 import time
 import os
@@ -63,12 +63,14 @@ def register():
 def login():
   email = request.json['email']
   password = request.json['password']
+  token = generate_token()
   result = db.user.update_one({
     'email': email,
     'password': hash_pwd(password),
   },{
     '$set': {
       'updated_at': int(time.time()),
+      'token': token,
     }
   })
   if result.modified_count == 0:
@@ -76,4 +78,39 @@ def login():
       "success": False,
       "message": "login failed",
     }
-  return {"success": True,}
+  user = db.user.find_one({'token': token})
+  if not user:
+    return {
+      "success": False,
+      "message": "login failed",
+    }
+  return {
+    "success": True,
+    "token": token,
+    "firstname": user['firstname'],
+  }
+
+@api.route('/logout/', methods=['GET', 'POST'])
+def logout():
+  token = request.json['token']
+  if not token:
+    return {
+      "success": False,
+    }
+  result = db.user.update_one({
+    'token': token,
+  },{
+    '$set': {
+      'updated_at': int(time.time()),
+    },
+    '$unset': {
+      'token': "",
+    }
+  })
+  if result.modified_count == 0:
+    return {
+      "success": False,
+    }
+  return {
+    "success": True,
+  }
